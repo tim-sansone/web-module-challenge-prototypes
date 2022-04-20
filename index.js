@@ -15,10 +15,23 @@
         + It should return a string with `name` and `age`. Example: "Mary, 50"
 */
 
-function Person() {
-
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+  this.stomach = [];
 }
 
+Person.prototype.eat = function(food) {
+  if(this.stomach.length < 10) {
+    this.stomach.push(food);
+  }
+}
+Person.prototype.poop = function() {
+  this.stomach = [];
+}
+Person.prototype.toString = function() {
+  return `${this.name}, ${this.age}`;
+}
 
 /*
   TASK 2
@@ -36,10 +49,34 @@ function Person() {
         + The `drive` method should return a string "I ran out of fuel at x miles!" x being `odometer`.
 */
 
-function Car() {
-
+function Car(model, mpg) {
+  this.model = model;
+  this.milesPerGallon = mpg;
+  this.tank = 0;
+  this.odometer = 0;
 }
-
+Car.prototype.fill = function(gallons) {
+  this.tank += gallons;
+}
+Car.prototype.drive = function(miles) {
+  for(let i = 0; i < miles; i++) {
+    if(this.tank <= 0) {
+      return `I ran out of fuel at ${this.odometer} miles!`
+    } else {
+      this.odometer += 1;
+      this.tank -= (1/this.milesPerGallon);
+    }
+  }
+  
+}
+const car1 = new Car("Nissan", 30);
+// console.log(car1);
+// car1.fill(12);
+// console.log(car1);
+// car1.drive(300);
+// console.log(car1);
+// console.log(car1.drive(300));
+// console.log(car1);
 
 /*
   TASK 3
@@ -49,18 +86,31 @@ function Car() {
         + Should return a string "Playing with x", x being the favorite toy.
 */
 
-function Baby() {
-
+function Baby(name, age, toy) {
+  Person.call(this, name, age);
+  this.favoriteToy = toy; 
+}
+Baby.prototype = Object.create(Person.prototype);
+Baby.prototype.play = function() {
+  return `Playing with ${this.favoriteToy}`;
 }
 
+const baby1 = new Baby("Max", 1, "teddy bear");
+// console.log(baby1);
+// baby1.eat("chicken mush");
+// baby1.eat("mush of peas");
+// baby1.eat("much of carrots");
+// console.log(baby1);
+// baby1.poop();
+// console.log(baby1);
 
 /* 
   TASK 4
   In your own words explain the four principles for the "this" keyword below:
-  1. 
-  2. 
-  3. 
-  4. 
+  1. By default "this" refers to the global object (or the window). When this happens it usually means you didn't correctly define this, because you basically never need it to be set to the global window.
+  2. Implicit: when "this" refers to the object to the left of the dot. When calling a method, it is implied that "this" will be the object for which the method is a property.
+  3. New: when using a constructor function, "this" refers to the new object being created at the calling of that function.
+  4. Explicit: when we explicitly state what object "this" refers to. We can do this using the .call function method.
 */
 
 ///////// END OF CHALLENGE /////////
